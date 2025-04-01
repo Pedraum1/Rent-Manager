@@ -27,3 +27,8 @@ def convert_datetime_to_str(row:list) -> list:
             data = value.strftime('%d/%m/%Y')
             row[index] = data
     return row
+
+def today() -> str:
+    data_hoje = datetime.today().date()
+    data_hoje = data_hoje.strftime('%d/%m/%Y')
+    return data_hoje

@@ -1,4 +1,5 @@
 from .Commands import *
+from Classes.Date import Date
 
 def choose_options(options:list, message:str = "Escolha dentre as opções:", return_type:str = "int"):
     option = False
@@ -31,3 +32,11 @@ def hasOption(choice:str)->bool:
         return True
     except ValueError:
         return False
+    
+def input_date(message:str = "Insira a data")->str:
+    inputed_date = input(message)
+    try:
+        inputed_date = Date(inputed_date)
+        return str(inputed_date)
+    except:
+        return input_date(message)

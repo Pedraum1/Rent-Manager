@@ -5,7 +5,7 @@ class Date:
         self.set_date(date)
 
     def set_date(self, date:str):
-        if(self.validate(date)):
+        if self.validate(date):
             date = date.split('/')
 
             self.day = int(date[0])
@@ -14,7 +14,8 @@ class Date:
         else:
             raise ValueError("Invalid Date")
 
-    def validate(self, date:str)->bool:
+    @staticmethod
+    def validate(date:str)->bool:
         #Validate if passed date is valid
 
         pattern = r"^(\d{2})/(\d{2})/(\d{4})$"

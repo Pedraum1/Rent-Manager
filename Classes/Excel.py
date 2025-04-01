@@ -1,22 +1,49 @@
 import pandas as pd
-from Functions.Tables import row_not_null, replace_nan_with_empty, convert_datetime_to_str
 import os
+
+from Functions.Tables import row_not_null, replace_nan_with_empty, convert_datetime_to_str
+from Classes.Models.Apartment import Apartment, ApartmentConfig
+from Classes.Models.House import House, HouseConfig
+from Classes.Models.Property import Property, Contract
+from Classes.Models.Tenant import Tenant
 
 class Excel:
     def __init__(self, table_file_name = "Table.xlsx"):
         current_directory = os.path.dirname(os.path.abspath(__file__))
 
-        self.file_path = os.path.join(current_directory, "..", "Tables", "Table.xlsx")
+        self.file_path = os.path.join(current_directory, "..", "Tables", table_file_name)
         self.sheets = pd.ExcelFile(self.file_path, engine="openpyxl").sheet_names
+    
+    def show_data(self):
+        for sheet in self.sheets:
+            for row in self.read_sheet(sheet):
+                print(f'{row[0]:<15}{row[1]:^15}{row[2]:^15}{row[3]:^10}{row[4]:^10}{row[5]:>20}')
 
-    def print_sheet(self, sheet_name:str):
-        print(pd.read_excel(self.file_path, sheet_name=sheet_name, engine="openpyxl"))
+    def get_overdue_rents(self,date:str) -> list:
+        rents = self.get_all_rents()
+        overdue_rents = list()
+        payday = int(date[:2])
 
-    def get_sheet(self, sheet_name:str):
-        return pd.read_excel(self.file_path, sheet_name=sheet_name, index_col=None, engine="openpyxl")
+        for rent in rents:
+            if rent.payday == '':
+                continue
+            if rent.payday == payday:
+                overdue_rents.append(rent)
 
-    def sheet_len(self, sheet_name:str) -> int:
-        return pd.read_excel(self.file_path, sheet_name=sheet_name, engine="openpyxl").shape[0]
+        return overdue_rents
+
+    def get_all_rents(self) -> list:
+        rents = list()
+        for sheet in self.sheets:
+            for row in self.read_sheet(sheet):
+                tenant = Tenant(row[5])
+                contract = Contract(row[4], row[3], row[1], row[2], tenant)
+                apartment_configs = ApartmentConfig(sheet[4:],row[0][-3:])
+
+                apartment = Apartment(apartment_configs, contract)
+
+                rents.append(apartment)
+        return rents
 
     def read_sheet(self, sheet_name:str) -> list:
         sheet_data = list()
@@ -30,14 +57,15 @@ class Excel:
 
         return sheet_data
 
-    def read_row(self, sheet:str, index:int):
+    def read_row(self, sheet:str, index:int)-> list:
         if(index < 0):
             raise ValueError("Value must be greater or equals to 0")
         return self.read_sheet(sheet)[index]
 
-if __name__ == "__main__":
-    tabela = Excel()
-    folha = tabela.sheets[0]
-    sheet = tabela.read_sheet(folha)
-    for row in range(0,tabela.sheet_len(folha)):
-        print(tabela.read_row(folha, row))
+    def get_sheet(self, sheet_name:str):
+        return pd.read_excel(self.file_path, sheet_name=sheet_name, index_col=None, engine="openpyxl")
+
+    def sheet_len(self, sheet_name:str) -> int:
+        return pd.read_excel(self.file_path, sheet_name=sheet_name, engine="openpyxl").shape[0]
+
+    

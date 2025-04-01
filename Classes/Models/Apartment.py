@@ -1,5 +1,5 @@
-from .Property import Property, Contract
-from ..Date import Date
+from Classes.Models.Property import Property, Contract
+from Classes.Date import Date
 
 from dataclasses import dataclass
 

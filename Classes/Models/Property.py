@@ -1,5 +1,5 @@
 from Classes.Date import Date
-from Tenant import Tenant
+from Classes.Models.Tenant import Tenant
 from abc import ABC
 from dataclasses import dataclass
 
@@ -10,7 +10,7 @@ class Contract:
     contract_start: Date
     contract_end: Date
     tenant: Tenant
-    rented: bool
+    rented: bool = True
 
 class Property(ABC):
 
