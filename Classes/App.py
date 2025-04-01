@@ -8,6 +8,8 @@ class App:
         self.OPTIONS = ["Encontrar alugueis vencidos", "Registros", "Informações", "Sair do Aplicativo"]
 
     def run(self):
+        clear()
+        wait(1)
         print(f"{self.APP_NAME} | J&S - Administração de Imóveis")
         print("Bem-vindo")
         wait(2)
@@ -23,13 +25,10 @@ class App:
             if function == 2 :
                 print(self)
             if function == len(self.OPTIONS)-1:
-                break
+                return
 
             input("Pressione qualquer tecla para prosseguir")
             clear()
-            exit_app = choose_options(["Sim","Não"], "Deseja sair do aplicativo?", "bool")
-            if not exit_app:
-                break
 
     def __str__(self) -> str:
         return f"{self.APP_NAME} | Version: {self.VERSION} | Running"
