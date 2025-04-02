@@ -4,7 +4,7 @@ import os
 from Functions.Tables import row_not_null, replace_nan_with_empty, convert_datetime_to_str, sheet_name
 from Classes.Models.Apartment import Apartment, ApartmentConfig
 from Classes.Models.House import House, HouseConfig
-from Classes.Models.Property import Property, Contract
+from Classes.Models.Property import Contract
 from Classes.Models.Tenant import Tenant
 
 class Excel:
@@ -22,14 +22,16 @@ class Excel:
 
     def get_overdue_rents(self,date:str) -> list:
         #returns a list of all rental instances to be charged in the provided date
-        rents = self.get_all_rents()
         overdue_rents = list()
 
-        for rent in rents:
-            if rent.payday == '':
-                continue
-            if rent.payday == date:
-                overdue_rents.append(rent)
+        for sheet in self.sheets:
+            for row in self.read_sheet(sheet):
+                generated_property = self.generate_property(row, sheet)
+
+                if generated_property.payday == '' or generated_property.payday != date:
+                    continue
+
+                overdue_rents.append(generated_property)
 
         return overdue_rents
 
@@ -39,19 +41,8 @@ class Excel:
         rents = list()
 
         for sheet in self.sheets:
-            sheet_type = sheet[:4]
-
-
             for row in self.read_sheet(sheet):
-
-                if sheet_type == "APTO":
-                    rents.append(self.generate_apartment(row, sheet))
-
-                if sheet_type == "CASA":
-                    rents.append(self.generate_house(row, sheet))
-
-                if sheet_type == "PTCM":
-                    rents.append(self.generate_store(row, sheet))
+                rents.append(self.generate_property(row, sheet))
 
         return rents
 
@@ -63,7 +54,7 @@ class Excel:
         for index, row in self.get_sheet(sheet_name).iterrows():
             linha = row
             linha = linha.to_list()
-            if(row_not_null(linha)):
+            if row_not_null(linha):
                 linha = convert_datetime_to_str(replace_nan_with_empty(linha))
                 sheet_data.append(replace_nan_with_empty(linha))
 
@@ -71,6 +62,18 @@ class Excel:
 
     def get_sheet(self, sheet_name:str):
         return pd.read_excel(self.file_path, sheet_name=sheet_name, index_col=None, engine="openpyxl")
+
+    def generate_property(self, row:list, sheet:str):
+        sheet_type = sheet[:4]
+
+        if sheet_type == "APTO":
+            return self.generate_apartment(row, sheet)
+
+        if sheet_type == "CASA":
+            return self.generate_house(row, sheet)
+
+        if sheet_type == "PTCM":
+            return self.generate_store(row, sheet)
 
     @staticmethod
     def generate_apartment(row:list, sheet:str)->Apartment:
@@ -81,7 +84,7 @@ class Excel:
         apartment_configs = ApartmentConfig(sheet_name(sheet), apartment_number)
 
         return Apartment(apartment_configs, contract)
-    
+
     @staticmethod
     def generate_house(row:list, sheet:str)->House:
         house_number = row[0][-3:]
@@ -93,5 +96,6 @@ class Excel:
         return House(house_configs, contract)
 
     #TODO: Criar Model de ponto comercial
+    @staticmethod
     def generate_store(row:list, sheet:str):
         pass
