@@ -34,19 +34,30 @@ class Excel:
         return overdue_rents
 
     def get_all_rents(self) -> list:
+        #returns a list of all rental instances
+
         rents = list()
+
         for sheet in self.sheets:
+            sheet_type = sheet[:4]
+
+
             for row in self.read_sheet(sheet):
-                tenant = Tenant(row[5])
-                contract = Contract(row[4], row[3], row[1], row[2], tenant)
-                apartment_configs = ApartmentConfig(sheet[4:],row[0][-3:])
 
-                apartment = Apartment(apartment_configs, contract)
+                if sheet_type == "APTO":
+                    rents.append(self.generate_apartment(row, sheet))
 
-                rents.append(apartment)
+                if sheet_type == "CASA":
+                    rents.append(self.generate_house(row, sheet))
+
+                if sheet_type == "PTCM":
+                    rents.append(self.generate_store(row, sheet))
+
         return rents
 
     def read_sheet(self, sheet_name:str) -> list:
+        #returns a list of all rental instances in a table sheet
+
         sheet_data = list()
 
         for index, row in self.get_sheet(sheet_name).iterrows():
@@ -61,7 +72,26 @@ class Excel:
     def get_sheet(self, sheet_name:str):
         return pd.read_excel(self.file_path, sheet_name=sheet_name, index_col=None, engine="openpyxl")
 
-    def sheet_len(self, sheet_name:str) -> int:
-        return pd.read_excel(self.file_path, sheet_name=sheet_name, engine="openpyxl").shape[0]
+    @staticmethod
+    def generate_apartment(row:list, sheet:str)->Apartment:
+        apartment_number = row[0][-3:]
 
+        tenant = Tenant(row[5])
+        contract = Contract(row[4], row[3], row[1], row[2], tenant, "APTO")
+        apartment_configs = ApartmentConfig(sheet_name(sheet), apartment_number)
+
+        return Apartment(apartment_configs, contract)
     
+    @staticmethod
+    def generate_house(row:list, sheet:str)->House:
+        house_number = row[0][-3:]
+
+        tenant = Tenant(row[5])
+        contract = Contract(row[4], row[3], row[1], row[2], tenant, "CASA")
+        house_configs = HouseConfig(sheet_name(sheet), house_number)
+
+        return House(house_configs, contract)
+
+    #TODO: Criar Model de ponto comercial
+    def generate_store(row:list, sheet:str):
+        pass

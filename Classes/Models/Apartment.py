@@ -7,7 +7,6 @@ from dataclasses import dataclass
 class ApartmentConfig:
     condominium: str
     apartment_number: int
-    block: str = 'a'
 
 class Apartment(Property):
 

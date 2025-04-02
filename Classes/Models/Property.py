@@ -10,6 +10,7 @@ class Contract:
     contract_start: Date
     contract_end: Date
     tenant: Tenant
+    property_type: str
     rented: bool = True
 
 class Property(ABC):

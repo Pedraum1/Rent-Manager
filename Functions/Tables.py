@@ -30,5 +30,8 @@ def convert_datetime_to_str(row:list) -> list:
 
 def today() -> str:
     data_hoje = datetime.today().date()
-    data_hoje = data_hoje.strftime('%d/%m/%Y')
+    data_hoje = int(data_hoje.strftime('%d'))
     return data_hoje
+
+def sheet_name(sheet:str):
+    return sheet[4:]
