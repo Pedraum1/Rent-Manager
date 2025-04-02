@@ -42,7 +42,12 @@ class App:
         function = choose_options(OPTIONS)
         if function == 0:
             excel = Excel()
-            print_apartments(excel.get_overdue_rents(today()))
+            data = excel.get_overdue_rents(today())
+
+            if len(data) == 0:
+                print("Não há imóveis a serem cobrados hoje")
+            else:
+                print_apartments(data)
             
         if function == 1:
             excel = Excel()
@@ -52,9 +57,14 @@ class App:
                 if date >= 1 or date <= 31:
                     break
                 print("O valor inserido não é válido")
-            date = int(date)
 
-            print_apartments(excel.get_overdue_rents(date))
+            date = int(date)
+            data = excel.get_overdue_rents(date)
+
+            if len(data) == 0:
+                print(f"Não há imóveis a serem cobrados no dia {date}")
+            else:
+                print_apartments(data)
 
         if function == len(OPTIONS)-1:
             return
