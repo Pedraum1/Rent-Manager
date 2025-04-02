@@ -37,6 +37,9 @@ class Date:
             return False
 
         return True
+    
+    def day(self)->str:
+        return str(self)[:2]
 
     def __str__(self)->str:
         return f"{self.day:02}/{self.month:02}/{self.year:04}"

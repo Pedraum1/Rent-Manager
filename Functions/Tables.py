@@ -28,7 +28,7 @@ def convert_datetime_to_str(row:list) -> list:
             row[index] = data
     return row
 
-def today() -> str:
+def today() -> int:
     data_hoje = datetime.today().date()
     data_hoje = int(data_hoje.strftime('%d'))
     return data_hoje
