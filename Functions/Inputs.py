@@ -40,3 +40,17 @@ def input_date(message:str = "Insira a data")->str:
         return str(inputed_date)
     except:
         return input_date(message)
+
+def input_integer(sentence: str)->int:
+    clear()
+
+    inputed_sentence = input(sentence)
+
+    try:
+        return int(inputed_sentence)
+    
+    except ValueError:
+        print("O valor inserido não é válido")
+        wait(2)
+        
+        return input_integer(sentence)

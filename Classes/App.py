@@ -46,7 +46,14 @@ class App:
             
         if function == 1:
             excel = Excel()
-            date = input_date("Digite a data a qual deseja pesquisar no formato dd/mm/yyyy:")
+
+            while True:
+                date = input_integer("Digite o dia do vencimento:")
+                if date >= 1 or date <= 31:
+                    break
+                print("O valor inserido não é válido")
+            date = int(date)
+
             print_apartments(excel.get_overdue_rents(date))
 
         if function == len(OPTIONS)-1:

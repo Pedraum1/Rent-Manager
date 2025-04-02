@@ -1,13 +1,14 @@
 import pandas as pd
 import os
 
-from Functions.Tables import row_not_null, replace_nan_with_empty, convert_datetime_to_str
+from Functions.Tables import row_not_null, replace_nan_with_empty, convert_datetime_to_str, sheet_name
 from Classes.Models.Apartment import Apartment, ApartmentConfig
 from Classes.Models.House import House, HouseConfig
 from Classes.Models.Property import Property, Contract
 from Classes.Models.Tenant import Tenant
 
 class Excel:
+    
     def __init__(self, table_file_name = "Table.xlsx"):
         current_directory = os.path.dirname(os.path.abspath(__file__))
 
@@ -20,14 +21,14 @@ class Excel:
                 print(f'{row[0]:<15}{row[1]:^15}{row[2]:^15}{row[3]:^10}{row[4]:^10}{row[5]:>20}')
 
     def get_overdue_rents(self,date:str) -> list:
+        #returns a list of all rental instances to be charged in the provided date
         rents = self.get_all_rents()
         overdue_rents = list()
-        payday = int(date[:2])
 
         for rent in rents:
             if rent.payday == '':
                 continue
-            if rent.payday == payday:
+            if rent.payday == date:
                 overdue_rents.append(rent)
 
         return overdue_rents
@@ -56,11 +57,6 @@ class Excel:
                 sheet_data.append(replace_nan_with_empty(linha))
 
         return sheet_data
-
-    def read_row(self, sheet:str, index:int)-> list:
-        if(index < 0):
-            raise ValueError("Value must be greater or equals to 0")
-        return self.read_sheet(sheet)[index]
 
     def get_sheet(self, sheet_name:str):
         return pd.read_excel(self.file_path, sheet_name=sheet_name, index_col=None, engine="openpyxl")
