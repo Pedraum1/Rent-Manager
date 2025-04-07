@@ -2,11 +2,9 @@ import pandas as pd
 import os
 
 from Functions.Tables import row_not_null, replace_nan_with_empty, convert_datetime_to_str, sheet_name
-from Classes.Models.Apartment import Apartment, ApartmentConfig
+from Classes.Models.Apartment import Apartment
 from Classes.Models.House import House, HouseConfig
 from Classes.Models.Property import Contract
-from Classes.Models.Tenant import Tenant
-
 class Excel:
     
     def __init__(self, table_file_name = "Table.xlsx"):
@@ -77,23 +75,23 @@ class Excel:
 
     @staticmethod
     def generate_apartment(row:list, sheet:str)->Apartment:
-        apartment_number = row[0][-3:]
 
-        tenant = Tenant(row[5])
+        tenant = row[5]
         contract = Contract(row[4], row[3], row[1], row[2], tenant, "APTO")
-        apartment_configs = ApartmentConfig(sheet_name(sheet), apartment_number)
+        apartment_number = row[0][-3:]
+        condominium_name = sheet_name(sheet)
 
-        return Apartment(apartment_configs, contract)
+        return Apartment(condominium_name, apartment_number, contract)
 
     @staticmethod
     def generate_house(row:list, sheet:str)->House:
+
         house_number = row[0][-3:]
-
-        tenant = Tenant(row[5])
+        house_street = sheet_name(sheet)
+        tenant = row[5]
         contract = Contract(row[4], row[3], row[1], row[2], tenant, "CASA")
-        house_configs = HouseConfig(sheet_name(sheet), house_number)
 
-        return House(house_configs, contract)
+        return House(house_street, house_number, contract)
 
     #TODO: Criar Model de ponto comercial
     @staticmethod

@@ -1,16 +1,9 @@
 from Classes.Models.Property import Property, Contract
 
-from dataclasses import dataclass
-
-@dataclass
-class HouseConfig:
-    street: str
-    street_number: int
-
 class House(Property):
 
-    def __init__(self, configs:HouseConfig, contract:Contract):
-        super().__init__(contract);
+    def __init__(self, street:str, number:str, contract:Contract):
+        super().__init__(contract)
 
-        self.street = configs.street
-        self.street_number = configs.street_number
+        self.street = street
+        self.number = number
