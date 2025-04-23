@@ -1,10 +1,11 @@
 import pandas as pd
-import os
 
 from Functions.Tables import row_not_null, replace_nan_with_empty, convert_datetime_to_str, sheet_name
 from Classes.Models.Apartment import Apartment
-from Classes.Models.House import House, HouseConfig
+from Classes.Models.House import House
 from Classes.Models.Property import Contract
+
+
 class Excel:
     
     def __init__(self, table_file_name = "Table.xlsx"):
@@ -12,13 +13,13 @@ class Excel:
 
         self.file_path = os.path.join(current_directory, "..", "Tables", table_file_name)
         self.sheets = pd.ExcelFile(self.file_path, engine="openpyxl").sheet_names
-    
+
     def show_data(self):
         for sheet in self.sheets:
             for row in self.read_sheet(sheet):
                 print(f'{row[0]:<15}{row[1]:^15}{row[2]:^15}{row[3]:^10}{row[4]:^10}{row[5]:>20}')
 
-    def get_overdue_rents(self,date:str) -> list:
+    def get_overdue_rents(self,date:int) -> list:
         #returns a list of all rental instances to be charged in the provided date
         overdue_rents = list()
 
