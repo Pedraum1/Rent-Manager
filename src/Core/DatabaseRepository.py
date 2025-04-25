@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from ..Models.Property import Property, PropertyDTO
 
 class DatabaseRepository(ABC):
 
@@ -28,6 +29,10 @@ class DatabaseRepository(ABC):
 
     @abstractmethod
     def update_tenant(self, property_id, tenant_data) -> bool:
+        pass
+
+    @abstractmethod
+    def add_property(self, property: Property, dto:PropertyDTO):
         pass
 
     @abstractmethod
