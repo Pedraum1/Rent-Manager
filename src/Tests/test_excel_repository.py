@@ -1,11 +1,12 @@
+import pytest
+
 from src.Core.ExcelRepository import ExcelRepository
-from pytest import fail
 
 def test_excel_repository_can_instantiate():
     try:
         database = ExcelRepository()
     except Exception as e:
-        fail(f"instantiate fail: {e}")
+        pytest.fail(f"instantiate fail: {e}")
     else:
         assert isinstance(database, ExcelRepository)
 

@@ -1,4 +1,7 @@
-from Core.Classes.OptionMenu import OptionMenu
+if __name__ == "__main__":
+    from Core.Classes.OptionMenu import OptionMenu
+else:
+    from ..Core.Classes.OptionMenu import OptionMenu
 
 class MenuView(OptionMenu):
 

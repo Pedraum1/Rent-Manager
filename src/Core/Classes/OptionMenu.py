@@ -1,4 +1,7 @@
-from Core.Classes.Menu import Menu
+if __name__ == "__main__":
+    from Menu import Menu
+else:
+    from .Menu import Menu
 from abc import ABC, abstractmethod
 
 class OptionMenu(Menu, ABC):
