@@ -1,9 +1,8 @@
-from abc import abstractmethod
 import openpyxl as op
 
 class DeleteSheet():
 
-    @abstractmethod
+    @staticmethod
     def handle(repository, sheet_name: str) -> bool:
         try:
             database = op.load_workbook(repository.file_path)

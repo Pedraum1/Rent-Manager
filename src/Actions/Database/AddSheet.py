@@ -1,9 +1,8 @@
-from abc import abstractmethod
 import pandas as pd
 
 class AddSheet():
 
-    @abstractmethod
+    @staticmethod
     def handle(repository, sheet_name: str, type:str) -> bool:
         header = ['id', 'inicio do contrato', 'final do contrato', 'vencimentos', 'valor do aluguel', 'nome do inquilino']
         
