@@ -32,8 +32,6 @@ class OptionMenu(Menu, ABC):
             response = int(response)
             #Condition to end function
             if response == len(self.options)-1:
-                self.clear_terminal()
-                print("Obrigado por utilizar o programa")
                 self.wait()
                 self.clear_terminal()
                 return

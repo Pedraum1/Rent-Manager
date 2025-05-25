@@ -1,4 +1,4 @@
-from Core.Classes.Menu import Menu
+from .Menu import Menu
 from abc import ABC
 
 class DataMenu(Menu):
@@ -17,4 +17,4 @@ class DataMenu(Menu):
             print(f"{index}. {info}")
 
         #Condition to end function
-        input("Pressione qualquer tecla para prosseguir")
+        input("Pressione Enter para prosseguir")
