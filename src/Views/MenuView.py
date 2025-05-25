@@ -1,7 +1,13 @@
 if __name__ == "__main__":
     from Core.Classes.OptionMenu import OptionMenu
+    from src.Views.Rents.RentView import RentView
+    from src.Views.CRUD.CrudView import CrudView
+    from src.Views.Settings.SettingsView import SettingsView
 else:
     from ..Core.Classes.OptionMenu import OptionMenu
+    from .Rents.RentView import RentView
+    from .CRUD.CrudView import CrudView
+    from .Settings.SettingsView import SettingsView
 
 class MenuView(OptionMenu):
 
@@ -12,16 +18,19 @@ class MenuView(OptionMenu):
     def execute_function(self, option_index:int):
         match option_index:
             case 0:
-                #Rent manage view
-                pass
+                #Rent management
+                rent_view = RentView()
+                rent_view.run()
 
             case 1:
                 #Database operations (CRUD)
-                pass
+                crud_view = CrudView()
+                crud_view.run()
 
             case 2:
                 #Settings
-                pass
+                settings_view = SettingsView()
+                settings_view.run()
 
             case _:
                 print("ERRO: Função não reconhecida")
