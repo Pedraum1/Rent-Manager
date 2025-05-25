@@ -21,3 +21,30 @@ def test_can_add_sheet():
 def test_can_delete_sheet():
     database = ExcelRepository()
     assert database.delete_sheet("APTO TEST")
+
+def test_can_edit_sheet():
+    database = ExcelRepository()
+
+    database.add_sheet("test 1", "APTO")
+    result = database.edit_sheet("APTO TEST 1", "TEST 2", "APTO")
+    database.delete_sheet("APTO TEST 2")
+    
+    assert result
+
+def test_can_edit_without_type():
+    database = ExcelRepository()
+
+    database.add_sheet("test 2", "APTO")
+    result = database.edit_sheet("APTO TEST 2", "TEST 3", None)
+    database.delete_sheet("APTO TEST 3")
+    
+    assert result
+
+def test_can_edit_without_new_name():
+    database = ExcelRepository()
+
+    database.add_sheet("test 3", "APTO")
+    result = database.edit_sheet("APTO TEST 3", None, "APTO")
+    database.delete_sheet("APTO TEST 3")
+    
+    assert result
