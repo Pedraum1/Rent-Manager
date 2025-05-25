@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from ..Models.Property import Property, PropertyDTO
+from src.Models.Property import Property, PropertyDTO
 
 class DatabaseRepository(ABC):
 
@@ -43,5 +43,10 @@ class DatabaseRepository(ABC):
     def add_sheet(self, sheet_name: str, type:str) -> bool:
         pass
 
+    @abstractmethod
+    def edit_sheet(self, sheet_name: str, new_name:str = None, type:str = None) -> bool:
+        pass
+
+    @abstractmethod
     def delete_sheet(self, sheet_name: str)->bool:
         pass
